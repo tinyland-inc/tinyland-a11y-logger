@@ -1,5 +1,5 @@
 /**
- * @tinyland-inc/tinyland-a11y-logger
+ * @tummycrypt/tinyland-a11y-logger
  *
  * Accessibility Loki logger with buffered batch sending for WCAG violation tracking.
  * Provides structured logging methods for contrast issues, WCAG violations, ARIA
@@ -10,7 +10,7 @@
  * import {
  *   configureA11yLogger,
  *   a11yLogger,
- * } from '@tinyland-inc/tinyland-a11y-logger';
+ * } from '@tummycrypt/tinyland-a11y-logger';
  *
  * // Configure once at startup
  * configureA11yLogger({
@@ -30,7 +30,7 @@
  * await a11yLogger.flush();
  * ```
  *
- * @module @tinyland-inc/tinyland-a11y-logger
+ * @module @tummycrypt/tinyland-a11y-logger
  */
 
 // Configuration

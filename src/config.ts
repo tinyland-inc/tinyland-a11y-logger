@@ -11,7 +11,7 @@
  *
  * @example
  * ```typescript
- * import { configureA11yLogger } from '@tinyland-inc/tinyland-a11y-logger';
+ * import { configureA11yLogger } from '@tummycrypt/tinyland-a11y-logger';
  *
  * configureA11yLogger({
  *   lokiUrl: 'http://loki:3100',

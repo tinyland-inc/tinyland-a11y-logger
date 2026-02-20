@@ -1,5 +1,5 @@
 {
-  "name": "@tinyland-inc/tinyland-a11y-logger",
+  "name": "@tummycrypt/tinyland-a11y-logger",
   "version": "0.1.0",
   "description": "Accessibility Loki logger with buffered batch sending for WCAG violation tracking",
   "type": "module",
@@ -48,5 +48,9 @@
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   }
 }
