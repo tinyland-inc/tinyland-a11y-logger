@@ -1,6 +1,6 @@
-/**
- * Tests for buffer accumulation, flush timing, and capacity behavior
- */
+
+
+
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import {
@@ -14,7 +14,7 @@ import {
 	resetA11yLoggerConfig,
 } from '../src/config.js';
 
-// Mock fetch globally
+
 const mockFetch = vi.fn().mockResolvedValue({ ok: true });
 vi.stubGlobal('fetch', mockFetch);
 
@@ -31,9 +31,9 @@ describe('Buffer behavior', () => {
 		vi.useRealTimers();
 	});
 
-	// -----------------------------------------------------------------------
-	// Buffer accumulation
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('accumulation', () => {
 		it('should start with an empty buffer', () => {
 			expect(_getLogBuffer()).toHaveLength(0);
@@ -70,17 +70,17 @@ describe('Buffer behavior', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Auto-flush at MAX_BUFFER_SIZE
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('auto-flush at maxBufferSize', () => {
 		it('should trigger flush when buffer reaches maxBufferSize (default 100)', () => {
 			for (let i = 0; i < 100; i++) {
 				a11yLogger.contrast(`C${i}`, {});
 			}
-			// Buffer was flushed (asynchronously), but the flush call was made
-			// Since flushLogs is async but called without await from addLog,
-			// the buffer gets cleared synchronously at the start of flushLogs
+			
+			
+			
 			expect(_getLogBuffer()).toHaveLength(0);
 		});
 
@@ -89,7 +89,7 @@ describe('Buffer behavior', () => {
 			a11yLogger.contrast('C1', {});
 			a11yLogger.contrast('C2', {});
 			expect(_getLogBuffer()).toHaveLength(2);
-			a11yLogger.contrast('C3', {}); // hits max
+			a11yLogger.contrast('C3', {}); 
 			expect(_getLogBuffer()).toHaveLength(0);
 		});
 
@@ -104,23 +104,23 @@ describe('Buffer behavior', () => {
 			a11yLogger.contrast('C1', {});
 			expect(_hasFlushTimer()).toBe(true);
 			a11yLogger.contrast('C2', {});
-			a11yLogger.contrast('C3', {}); // triggers immediate flush
+			a11yLogger.contrast('C3', {}); 
 			expect(_hasFlushTimer()).toBe(false);
 		});
 
 		it('should allow new entries after an auto-flush', () => {
 			configureA11yLogger({ maxBufferSize: 2 });
 			a11yLogger.contrast('C1', {});
-			a11yLogger.contrast('C2', {}); // flush
-			a11yLogger.contrast('C3', {}); // new entry
+			a11yLogger.contrast('C2', {}); 
+			a11yLogger.contrast('C3', {}); 
 			expect(_getLogBuffer()).toHaveLength(1);
 			expect(_getLogBuffer()[0].message).toBe('C3');
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Timed flush
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('timed flush', () => {
 		it('should schedule a flush timer after adding a log', () => {
 			a11yLogger.contrast('Test', {});
@@ -130,7 +130,7 @@ describe('Buffer behavior', () => {
 		it('should not schedule multiple timers for multiple entries', () => {
 			a11yLogger.contrast('C1', {});
 			a11yLogger.contrast('C2', {});
-			// Timer should still be active (only one scheduled)
+			
 			expect(_hasFlushTimer()).toBe(true);
 		});
 
@@ -138,7 +138,7 @@ describe('Buffer behavior', () => {
 			a11yLogger.contrast('Test', {});
 			expect(_getLogBuffer()).toHaveLength(1);
 			vi.advanceTimersByTime(1000);
-			// Allow the async flush to complete
+			
 			await vi.runAllTimersAsync();
 			expect(_getLogBuffer()).toHaveLength(0);
 		});
@@ -179,9 +179,9 @@ describe('Buffer behavior', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Manual flush
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('manual flush()', () => {
 		it('should flush all buffered entries', async () => {
 			a11yLogger.contrast('C1', {});
@@ -229,9 +229,9 @@ describe('Buffer behavior', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Timer management
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('timer management', () => {
 		it('should not have a timer initially', () => {
 			expect(_hasFlushTimer()).toBe(false);
@@ -265,9 +265,9 @@ describe('Buffer behavior', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Edge cases
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('edge cases', () => {
 		it('should handle large number of entries without crash', () => {
 			configureA11yLogger({ maxBufferSize: 10000 });
@@ -288,7 +288,7 @@ describe('Buffer behavior', () => {
 		it('should handle maxBufferSize of 2 with interleaved methods', () => {
 			configureA11yLogger({ maxBufferSize: 2 });
 			a11yLogger.contrast('C1', {});
-			a11yLogger.wcag('W1', {}); // triggers flush at 2
+			a11yLogger.wcag('W1', {}); 
 			expect(_getLogBuffer()).toHaveLength(0);
 			a11yLogger.error('E1', {});
 			expect(_getLogBuffer()).toHaveLength(1);

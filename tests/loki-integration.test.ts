@@ -1,6 +1,6 @@
-/**
- * Tests for Loki push payload format, fetch behavior, and dev fallback
- */
+
+
+
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import {
@@ -12,11 +12,11 @@ import {
 	resetA11yLoggerConfig,
 } from '../src/config.js';
 
-// Mock fetch globally
+
 const mockFetch = vi.fn().mockResolvedValue({ ok: true });
 vi.stubGlobal('fetch', mockFetch);
 
-// Mock console for dev fallback tests
+
 const mockConsoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
 const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
@@ -36,9 +36,9 @@ describe('Loki integration', () => {
 		vi.useRealTimers();
 	});
 
-	// -----------------------------------------------------------------------
-	// Loki push payload format
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('push payload format', () => {
 		it('should call fetch with correct URL', async () => {
 			configureA11yLogger({
@@ -130,18 +130,18 @@ describe('Loki integration', () => {
 			const values = body.streams[0].values;
 			expect(values).toHaveLength(1);
 			expect(values[0]).toHaveLength(2);
-			// First element is nanosecond timestamp (string)
+			
 			expect(typeof values[0][0]).toBe('string');
-			// Second element is JSON string
+			
 			const parsed = JSON.parse(values[0][1]);
 			expect(parsed).toHaveProperty('level');
 			expect(parsed).toHaveProperty('msg');
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Nanosecond timestamp conversion
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('nanosecond timestamps', () => {
 		it('should convert ISO timestamp to nanoseconds', async () => {
 			configureA11yLogger({ lokiEnabled: true });
@@ -164,9 +164,9 @@ describe('Loki integration', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// JSON serialization
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('JSON serialization of entries', () => {
 		it('should include level in the serialized value', async () => {
 			configureA11yLogger({ lokiEnabled: true });
@@ -207,9 +207,9 @@ describe('Loki integration', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Fetch failure handling
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('fetch failure handling', () => {
 		it('should not throw when fetch rejects', async () => {
 			configureA11yLogger({ lokiEnabled: true });
@@ -234,8 +234,8 @@ describe('Loki integration', () => {
 			mockFetch.mockRejectedValueOnce(new Error('Fail'));
 			a11yLogger.contrast('Test', {});
 			await a11yLogger.flush();
-			expect(_resetInternalState).toBeDefined(); // state helper exists
-			// Buffer was cleared at the start of flushLogs
+			expect(_resetInternalState).toBeDefined(); 
+			
 		});
 
 		it('should continue working after a fetch failure', async () => {
@@ -250,9 +250,9 @@ describe('Loki integration', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Loki disabled mode (development fallback)
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('Loki disabled mode', () => {
 		it('should not call fetch when Loki is disabled', async () => {
 			configureA11yLogger({ lokiEnabled: false });
@@ -293,15 +293,15 @@ describe('Loki integration', () => {
 			configureA11yLogger({ lokiEnabled: false });
 			a11yLogger.contrast('Test', {});
 			await a11yLogger.flush();
-			// Import _getLogBuffer to verify
+			
 			const { _getLogBuffer } = await import('../src/a11y-logger.js');
 			expect(_getLogBuffer()).toHaveLength(0);
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Multiple entries batched in single push
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('batch push', () => {
 		it('should send multiple entries in a single fetch call', async () => {
 			configureA11yLogger({ lokiEnabled: true });

@@ -1,6 +1,6 @@
-/**
- * Tests for the DI configuration module
- */
+
+
+
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
@@ -15,9 +15,9 @@ describe('A11yLogger Config', () => {
 		resetA11yLoggerConfig();
 	});
 
-	// -----------------------------------------------------------------------
-	// getA11yLoggerConfig - defaults
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('getA11yLoggerConfig() defaults', () => {
 		it('should return default lokiUrl', () => {
 			expect(getA11yLoggerConfig().lokiUrl).toBe('http://localhost:3100');
@@ -79,9 +79,9 @@ describe('A11yLogger Config', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// configureA11yLogger - merging
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('configureA11yLogger()', () => {
 		it('should override lokiUrl', () => {
 			configureA11yLogger({ lokiUrl: 'http://loki:3100' });
@@ -154,9 +154,9 @@ describe('A11yLogger Config', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// resetA11yLoggerConfig
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('resetA11yLoggerConfig()', () => {
 		it('should reset lokiUrl to default', () => {
 			configureA11yLogger({ lokiUrl: 'http://custom:3100' });

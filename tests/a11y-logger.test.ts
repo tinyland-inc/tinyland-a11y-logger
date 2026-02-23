@@ -1,6 +1,6 @@
-/**
- * Tests for the core a11yLogger API methods
- */
+
+
+
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import {
@@ -13,7 +13,7 @@ import {
 	resetA11yLoggerConfig,
 } from '../src/config.js';
 
-// Mock fetch globally
+
 const mockFetch = vi.fn().mockResolvedValue({ ok: true });
 vi.stubGlobal('fetch', mockFetch);
 
@@ -30,9 +30,9 @@ describe('a11yLogger', () => {
 		vi.useRealTimers();
 	});
 
-	// -----------------------------------------------------------------------
-	// contrast()
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('contrast()', () => {
 		it('should add a contrast log entry to the buffer', () => {
 			a11yLogger.contrast('Low contrast', { selector: 'h1' });
@@ -133,9 +133,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// wcag()
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('wcag()', () => {
 		it('should add a wcag log entry', () => {
 			a11yLogger.wcag('WCAG violation', {});
@@ -195,9 +195,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// evaluation()
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('evaluation()', () => {
 		it('should add an evaluation log entry', () => {
 			a11yLogger.evaluation('Eval complete', {});
@@ -241,9 +241,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// session()
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('session()', () => {
 		it('should add a session log entry', () => {
 			a11yLogger.session('Session started', {});
@@ -284,9 +284,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// error()
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('error()', () => {
 		it('should add an error log entry', () => {
 			a11yLogger.error('Something broke', {});
@@ -324,9 +324,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// summary()
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('summary()', () => {
 		it('should add a summary log entry', () => {
 			a11yLogger.summary({
@@ -406,9 +406,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// aria()
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('aria()', () => {
 		it('should add an aria log entry', () => {
 			a11yLogger.aria('Missing label', {});
@@ -462,9 +462,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// flush()
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('flush()', () => {
 		it('should clear the buffer after flush', async () => {
 			a11yLogger.contrast('Test', {});
@@ -479,9 +479,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// Cross-method tests
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('cross-method behavior', () => {
 		it('should accumulate entries from different methods', () => {
 			a11yLogger.contrast('C1', {});
@@ -511,7 +511,7 @@ describe('a11yLogger', () => {
 		});
 
 		it('should generate unique timestamps for rapid calls', () => {
-			// With fake timers, timestamps will be the same, but entries should still be separate
+			
 			a11yLogger.contrast('A', {});
 			a11yLogger.contrast('B', {});
 			expect(_getLogBuffer()).toHaveLength(2);
@@ -547,9 +547,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// contrast() - additional ratio edge cases
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('contrast() ratio edge cases', () => {
 		it('should set level to error when ratio is negative', () => {
 			a11yLogger.contrast('Negative', { ratio: -1 });
@@ -572,9 +572,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// wcag() - additional severity cases
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('wcag() severity edge cases', () => {
 		it('should set level to warn for non-error severity strings', () => {
 			a11yLogger.wcag('Info', { severity: 'info' });
@@ -587,9 +587,9 @@ describe('a11yLogger', () => {
 		});
 	});
 
-	// -----------------------------------------------------------------------
-	// summary() - additional cases
-	// -----------------------------------------------------------------------
+	
+	
+	
 	describe('summary() additional cases', () => {
 		it('should handle large numbers', () => {
 			a11yLogger.summary({
