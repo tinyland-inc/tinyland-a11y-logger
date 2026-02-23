@@ -1,13 +1,13 @@
-/**
- * Accessibility Logger for Loki Integration
- *
- * Specialized logger for streaming accessibility evaluation results to Loki.
- * Handles structured logging of WCAG violations, contrast issues, and evaluation metrics.
- *
- * All configuration is injected via the DI config module -- no direct process.env reads.
- *
- * @module a11y-logger
- */
+
+
+
+
+
+
+
+
+
+
 
 import { getA11yLoggerConfig } from './config.js';
 import type {
@@ -22,21 +22,21 @@ import type {
 	WcagLabels,
 } from './types.js';
 
-// ---------------------------------------------------------------------------
-// Internal buffer state
-// ---------------------------------------------------------------------------
+
+
+
 
 let logBuffer: A11yLogEntry[] = [];
 let flushTimer: ReturnType<typeof setTimeout> | null = null;
 let shutdownHookRegistered = false;
 
-// ---------------------------------------------------------------------------
-// Internal helpers
-// ---------------------------------------------------------------------------
 
-/**
- * Flush buffered logs to Loki (or console in dev mode).
- */
+
+
+
+
+
+
 async function flushLogs(): Promise<void> {
 	if (logBuffer.length === 0) return;
 
@@ -46,7 +46,7 @@ async function flushLogs(): Promise<void> {
 	const cfg = getA11yLoggerConfig();
 
 	if (!cfg.lokiEnabled) {
-		// In development without Loki, just console log
+		
 		logsToSend.forEach((log) => {
 			if (cfg.isDevelopment) {
 				console.log(`[A11y ${log.level.toUpperCase()}] ${log.message}`, log.labels);
@@ -65,7 +65,7 @@ async function flushLogs(): Promise<void> {
 					service: cfg.serviceLabel,
 				},
 				values: logsToSend.map((log) => [
-					(new Date(log.timestamp).getTime() * 1000000).toString(), // nanoseconds
+					(new Date(log.timestamp).getTime() * 1000000).toString(), 
 					JSON.stringify({
 						level: log.level,
 						msg: log.message,
@@ -87,9 +87,9 @@ async function flushLogs(): Promise<void> {
 	}
 }
 
-/**
- * Schedule a deferred flush if one is not already pending.
- */
+
+
+
 function scheduleFlush(): void {
 	if (flushTimer) return;
 
@@ -99,21 +99,21 @@ function scheduleFlush(): void {
 		flushLogs();
 	}, cfg.flushInterval);
 
-	// Prevent the timer from keeping Node.js alive
+	
 	if (flushTimer && typeof flushTimer === 'object' && 'unref' in flushTimer) {
 		flushTimer.unref();
 	}
 }
 
-/**
- * Add a log entry to the buffer and trigger flush logic.
- */
+
+
+
 function addLog(entry: A11yLogEntry): void {
 	logBuffer.push(entry);
 
 	const cfg = getA11yLoggerConfig();
 
-	// Immediate flush if buffer is full
+	
 	if (logBuffer.length >= cfg.maxBufferSize) {
 		if (flushTimer) {
 			clearTimeout(flushTimer);
@@ -125,9 +125,9 @@ function addLog(entry: A11yLogEntry): void {
 	}
 }
 
-/**
- * Ensure the shutdown hook is registered (at most once).
- */
+
+
+
 function ensureShutdownHook(): void {
 	if (shutdownHookRegistered) return;
 
@@ -142,23 +142,23 @@ function ensureShutdownHook(): void {
 	}
 }
 
-// ---------------------------------------------------------------------------
-// Public API
-// ---------------------------------------------------------------------------
 
-/**
- * Accessibility logger with buffered Loki integration.
- *
- * Provides structured logging methods for contrast violations, WCAG issues,
- * ARIA problems, evaluation metrics, session tracking, errors, and summaries.
- *
- * Logs are buffered and flushed in batches to Loki. In development mode
- * (when Loki is not enabled), logs are written to the console.
- */
+
+
+
+
+
+
+
+
+
+
+
+
 export const a11yLogger: A11yLoggerApi = {
-	/**
-	 * Log contrast ratio violation
-	 */
+	
+
+
 	contrast(message: string, labels: ContrastLabels) {
 		ensureShutdownHook();
 		addLog({
@@ -181,9 +181,9 @@ export const a11yLogger: A11yLoggerApi = {
 		});
 	},
 
-	/**
-	 * Log WCAG violation
-	 */
+	
+
+
 	wcag(message: string, labels: WcagLabels) {
 		ensureShutdownHook();
 		addLog({
@@ -201,9 +201,9 @@ export const a11yLogger: A11yLoggerApi = {
 		});
 	},
 
-	/**
-	 * Log evaluation batch
-	 */
+	
+
+
 	evaluation(message: string, labels: EvaluationLabels) {
 		ensureShutdownHook();
 		addLog({
@@ -221,9 +221,9 @@ export const a11yLogger: A11yLoggerApi = {
 		});
 	},
 
-	/**
-	 * Log session info
-	 */
+	
+
+
 	session(message: string, labels: SessionLabels) {
 		ensureShutdownHook();
 		addLog({
@@ -240,9 +240,9 @@ export const a11yLogger: A11yLoggerApi = {
 		});
 	},
 
-	/**
-	 * Log error
-	 */
+	
+
+
 	error(message: string, labels: ErrorLabels) {
 		ensureShutdownHook();
 		addLog({
@@ -258,9 +258,9 @@ export const a11yLogger: A11yLoggerApi = {
 		});
 	},
 
-	/**
-	 * Log summary of accessibility evaluation
-	 */
+	
+
+
 	summary(data: SummaryData) {
 		ensureShutdownHook();
 		addLog({
@@ -279,9 +279,9 @@ export const a11yLogger: A11yLoggerApi = {
 		});
 	},
 
-	/**
-	 * Log ARIA violation
-	 */
+	
+
+
 	aria(message: string, labels: AriaLabels) {
 		ensureShutdownHook();
 		addLog({
@@ -300,9 +300,9 @@ export const a11yLogger: A11yLoggerApi = {
 		});
 	},
 
-	/**
-	 * Flush logs immediately (for graceful shutdown).
-	 */
+	
+
+
 	async flush() {
 		if (flushTimer) {
 			clearTimeout(flushTimer);
@@ -312,22 +312,22 @@ export const a11yLogger: A11yLoggerApi = {
 	},
 };
 
-// ---------------------------------------------------------------------------
-// Test helpers (not part of the public API contract, but exported for tests)
-// ---------------------------------------------------------------------------
 
-/**
- * @internal Get a shallow copy of the current log buffer.
- * Exported for testing only.
- */
+
+
+
+
+
+
+
 export function _getLogBuffer(): A11yLogEntry[] {
 	return [...logBuffer];
 }
 
-/**
- * @internal Reset internal state (buffer, timer, shutdown hook flag).
- * Exported for testing only.
- */
+
+
+
+
 export function _resetInternalState(): void {
 	if (flushTimer) {
 		clearTimeout(flushTimer);
@@ -337,10 +337,10 @@ export function _resetInternalState(): void {
 	shutdownHookRegistered = false;
 }
 
-/**
- * @internal Check if a flush timer is currently pending.
- * Exported for testing only.
- */
+
+
+
+
 export function _hasFlushTimer(): boolean {
 	return flushTimer !== null;
 }

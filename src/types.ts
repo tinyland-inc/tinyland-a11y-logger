@@ -1,12 +1,12 @@
-/**
- * Types for the accessibility logger
- *
- * @module types
- */
 
-/**
- * Log entry stored in the internal buffer before flushing to Loki
- */
+
+
+
+
+
+
+
+
 export interface A11yLogEntry {
 	level: 'info' | 'warn' | 'error';
 	message: string;
@@ -15,9 +15,9 @@ export interface A11yLogEntry {
 	labels: Record<string, string | number>;
 }
 
-/**
- * Labels for contrast ratio violations
- */
+
+
+
 export interface ContrastLabels {
 	sessionId?: string;
 	selector?: string;
@@ -34,9 +34,9 @@ export interface ContrastLabels {
 	theme?: string;
 }
 
-/**
- * Labels for WCAG violations
- */
+
+
+
 export interface WcagLabels {
 	sessionId?: string;
 	selector?: string;
@@ -45,9 +45,9 @@ export interface WcagLabels {
 	severity?: string;
 }
 
-/**
- * Labels for evaluation batches
- */
+
+
+
 export interface EvaluationLabels {
 	sessionId?: string;
 	resultsCount?: number;
@@ -56,9 +56,9 @@ export interface EvaluationLabels {
 	evaluationTimeMs?: number;
 }
 
-/**
- * Labels for session events
- */
+
+
+
 export interface SessionLabels {
 	sessionId?: string;
 	action?: string;
@@ -66,18 +66,18 @@ export interface SessionLabels {
 	userAgent?: string;
 }
 
-/**
- * Labels for error events
- */
+
+
+
 export interface ErrorLabels {
 	sessionId?: string;
 	error?: string;
 	stack?: string;
 }
 
-/**
- * Data for accessibility evaluation summary
- */
+
+
+
 export interface SummaryData {
 	totalElements: number;
 	evaluatedElements: number;
@@ -87,9 +87,9 @@ export interface SummaryData {
 	sessionId?: string;
 }
 
-/**
- * Labels for ARIA violations
- */
+
+
+
 export interface AriaLabels {
 	sessionId?: string;
 	selector?: string;
@@ -102,9 +102,9 @@ export interface AriaLabels {
 	page?: string;
 }
 
-/**
- * The public API shape of the a11y logger
- */
+
+
+
 export interface A11yLoggerApi {
 	contrast(message: string, labels: ContrastLabels): void;
 	wcag(message: string, labels: WcagLabels): void;
